@@ -46,6 +46,35 @@ mkdir -p "${HOME}/.config/zsh" "${HOME}/.cache/zsh" \
 curl -fLo "${HOME}/.vim/autoload/plug.vim" --create-dirs \
   https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
+###############################################################################
+# Install oh-my-zsh
+###############################################################################
+ln -fs "${clone_path}/.zshenv" "${HOME}/.zshenv"
+OH_MY_ZSH_PATH="${HOME}/.config/zsh/ohmyzsh/"
+ZSH_CUSTOM="${HOME}/.config/zsh/ohmyzsh/custom"
+ZSH_CUSTOM_SYNTAX="${HOME}/.config/zsh/ohmyzsh/custom/pluginszsh-syntax-highlighting"
+ZSH_CUSTOM_AUTOSUG="${HOME}/.config/zsh/ohmyzsh/custom/pluginscustom/plugins/zsh-autosuggestions"
+
+# install oh-my-zsh
+if ! [ -n "$ZSH" ]; then
+    echo "install oh-my-zsh"
+    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+else
+    echo "oh-my-zsh already installed"
+fi
+
+# install syntax-highlighting
+if ! [ -d "$ZSH_CUSTOM_SYNTAX" ]; then
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
+fi
+
+# install auto-suggestions
+if ! [ -d "$ZSH_CUSTOM_AUTOSUG" ]; then
+    git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
+fi
+
+# install autojump
+sudo -E apt-get install autojump
 
 ###############################################################################
 # Setup symlink
@@ -76,13 +105,12 @@ while true; do
   read -rep $'\nReady to continue and apply the symlinks? (y/n/ctrl+c) ' y
   case "${y}" in
       [Yy]*)
-        ln -fs "${clone_path}/.zshenv" "${HOME}/.zshenv"
-        ln -fs "${clone_path}/.tmux.conf" "${HOME}/.tmux.conf"
-        ln -fs "${clone_path}/.vimrc" "${HOME}/.vimrc"
-        ln -fs "${clone_path}/.vim/spell/en.utf-8.add" "${HOME}/.vim/spell/en.utf-8.add"
         ln -fs "${clone_path}/.config/zsh/.zshrc" "${HOME}/.config/zsh/.zshrc"
         ln -fs "${clone_path}/.config/zsh/.zprofile" "${HOME}/.config/zsh/.zprofile"
         ln -fs "${clone_path}/.config/zsh/.aliases" "${HOME}/.config/zsh/.aliases"
+        ln -fs "${clone_path}/.tmux.conf" "${HOME}/.tmux.conf"
+        ln -fs "${clone_path}/.vimrc" "${HOME}/.vimrc"
+        ln -fs "${clone_path}/.vim/spell/en.utf-8.add" "${HOME}/.vim/spell/en.utf-8.add"
         break;;
       [Nn]*)
         echo "do not create symbolic link"
@@ -91,34 +119,7 @@ while true; do
   esac
 done
 
-###############################################################################
-# Install oh-my-zsh
-###############################################################################
-OH_MY_ZSH_PATH="${HOME}/.config/zsh/ohmyzsh/"
-ZSH_CUSTOM="${HOME}/.config/zsh/ohmyzsh/custom"
-ZSH_CUSTOM_SYNTAX="${HOME}/.config/zsh/ohmyzsh/custom/pluginszsh-syntax-highlighting"
-ZSH_CUSTOM_AUTOSUG="${HOME}/.config/zsh/ohmyzsh/custom/pluginscustom/plugins/zsh-autosuggestions"
 
-# install oh-my-zsh
-if ! [ -d "$OH_MY_ZSH_PATH" ]; then
-    echo "install oh-my-zsh"
-    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-else
-    echo "oh-my-zsh already installed"
-fi
-
-# install syntax-highlighting
-if ! [ -d "$ZSH_CUSTOM_SYNTAX" ]; then
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
-fi
-
-# install auto-suggestions
-if ! [ -d "$ZSH_CUSTOM_AUTOSUG" ]; then
-    git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
-fi
-
-# install autojump
-sudo -E apt-get install autojump
 
 ###############################################################################
 # Install Vim plugins
