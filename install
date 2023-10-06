@@ -21,14 +21,14 @@ read -rp "Do you want to install the above packages? (y/n) " yn
 case "$yn" in
     [Yy]*)
         if [ "${os_type}" == "Linux" ]; then
-            sudo apt-get update && sudo apt-get install -y ${apt_packages} ${apt_packages_optional}
+            sudo -E apt-get update && sudo -E apt-get install -y ${apt_packages} ${apt_packages_optional}
         fi
         ;;
     [Nn]*)
         echo "Do not install any packages"
         # exit 0
         ;;
-    *) 
+    *)
         echo "Please answer y or n";;
 esac
 
@@ -43,17 +43,31 @@ mkdir -p "${HOME}/.config/zsh" "${HOME}/.cache/zsh" \
 ###############################################################################
 # Install oh-my-zsh
 ###############################################################################
-if [-z $ZSH]; then
+OH_MY_ZSH_PATH="${HOME}/.oh-my-zsh"
+ZSH_CUSTOM_SYNTAX=~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+ZSH_CUSTOM_AUTOSUG=~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+
+# install oh-my-zsh
+if ! [ -d "$OH_MY_ZSH_PATH" ]; then
+    echo "install oh-my-zsh"
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-    # install syntax-highlighting
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-    # install auto-suggestions
-    git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
-    # install autojump
-    sudo apt-get install autojump
 else
     echo "oh-my-zsh already installed"
 fi
+
+# install syntax-highlighting
+if ! [ -d "$ZSH_CUSTOM_SYNTAX" ]; then
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+fi
+
+# install auto-suggestions
+if ! [ -d "$ZSH_CUSTOM_SYNTAX" ]; then
+    git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
+fi
+
+# install autojump
+sudo -E apt-get install autojump
+
 
 
 ###############################################################################
@@ -88,7 +102,7 @@ while true; do
 done
 
 
-ln -fs "${clone_path}/.zshenv" "${HOME}/.zshenv" 
+ln -fs "${clone_path}/.zshenv" "${HOME}/.zshenv"
 ln -fs "${clone_path}/.tmux.conf" "${HOME}/.tmux.conf"
 ln -fs "${clone_path}/.vimrc" "${HOME}/.vimrc"
 ln -fs "${clone_path}/.vim/spell/en.utf-8.add" "${HOME}/.vim/spell/en.utf-8.add"
