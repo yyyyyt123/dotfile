@@ -58,7 +58,9 @@ ZSH_CUSTOM_AUTOSUG="${HOME}/.config/zsh/ohmyzsh/custom/pluginscustom/plugins/zsh
 if ! [ -n "$ZSH" ]; then
     echo "install oh-my-zsh"
     git clone https://github.com/ohmyzsh/ohmyzsh.git
+    cd ohmyzsh/tools
     ZSH="$OH_MY_ZSH_PATH" sh install.sh
+    cd -
 else
     echo "oh-my-zsh already installed"
 fi
