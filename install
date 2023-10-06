@@ -100,7 +100,7 @@ ZSH_CUSTOM_SYNTAX="${HOME}/.config/zsh/ohmyzsh/custom/pluginszsh-syntax-highligh
 ZSH_CUSTOM_AUTOSUG="${HOME}/.config/zsh/ohmyzsh/custom/pluginscustom/plugins/zsh-autosuggestions"
 
 # install oh-my-zsh
-if ! [ -d "$OH_MY_ZSH_PATH" ]; then
+if ! [ -n "$ZSH" ]; then
     echo "install oh-my-zsh"
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 else
@@ -148,7 +148,7 @@ fi
 command -v conda activate oobleck >/dev/null 2>&1
 if [ $? -eq 0 ]; then
     echo "Environmental installed"
-else 
+else
     conda env create -f environment.yml
 fi
 
