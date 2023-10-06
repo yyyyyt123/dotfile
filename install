@@ -120,7 +120,6 @@ while true; do
 done
 
 
-
 ###############################################################################
 # Install Vim plugins
 ###############################################################################
@@ -149,7 +148,7 @@ fi
 command -v conda activate oobleck >/dev/null 2>&1
 if [ $? -eq 0 ]; then
     echo "Environmental installed"
-else 
+else
     conda env create -f environment.yml
 fi
 
